@@ -1,0 +1,27 @@
+body {
+  background-color: tomato;
+}
+
+select {
+  height: 30px;
+  width: 200px;
+  font-size: 16px;
+}
+
+ul {
+  font-size: 20px;
+}
+
+button {
+  background-color: #4CAF50; /* Green */
+      border: thick;
+      color: black;
+      padding: 15px 32px;
+      text-align: center;
+      text-decoration: none;
+/*      display: inline-block;
+*/      font-size: 16px;
+      content: 'MAPS';
+
+}
+
