@@ -32,7 +32,6 @@ var render = function( crimes ) {
   else{
     crimeToDisplay = crimes[0];
   }
-
   populateSelect(crimes);
 }
 
@@ -67,19 +66,18 @@ var populateSelect = function( crimes ) {
   var crimeList = [];
   var uniqueCrimeList= [];
   var select = document.querySelector('#crime-list');
-  console.log("populateselect")
-  console.log("crime", crimes)
-  console.log('crimeList',crimeList)
 
   crimes.forEach(function(item, index) {
-    console.log("index", index)
     crimeList[index] = item.category;
-    console.log("category", crimeList[index])
   });
-  console.log("array size", crimeList.length)
 
-  var uniqueNames = removeDuplicates( crimeList );
-  console.log("uniqueNames", uniqueNames)
+  var uniqueCrimeList = removeDuplicates( crimeList );
+
+  uniqueCrimeList.forEach (function( uniqueCrimeList, index ) {
+    var option = document.createElement('option');
+    option.text = uniqueCrimeList;
+    select.appendChild(option);  
+  });
 }
 
 //removeDuplicates
