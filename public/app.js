@@ -65,6 +65,7 @@ var render = function( crimes ) {
 //populateSelect
 var populateSelect = function( crimes ) {
   var crimeList = [];
+  var uniqueCrimeList= [];
   var select = document.querySelector('#crime-list');
   console.log("populateselect")
   console.log("crime", crimes)
@@ -76,10 +77,19 @@ var populateSelect = function( crimes ) {
     console.log("category", crimeList[index])
   });
   console.log("array size", crimeList.length)
-  var uniqueCrimeList = crimeList.prototype.sortUnique; 
 
+  var uniqueNames = removeDuplicates( crimeList );
+  console.log("uniqueNames", uniqueNames)
+}
 
-  }
+//removeDuplicates
+var removeDuplicates = function ( crimeList ) {
+  var uniqueCrimeList = crimeList.filter(function( crime, currentIndex) {
+    var firstCrimeType = crimeList.indexOf(crime);
+    return firstCrimeType === currentIndex;
+  });
+  return  uniqueCrimeList;
+}
 
 //   brewdogBeers.forEach(function(item, index) {
 //     item.index = index;
@@ -108,5 +118,5 @@ var populateSelect = function( crimes ) {
 
 
 
-window.addEventListener('load', app);
+  window.addEventListener('load', app);
 
