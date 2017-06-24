@@ -37,29 +37,12 @@ var render = function( crimes ) {
 
 }
 
-
-// displayCrimes
-// var displayCrimes = function(chosenCrime, allCrimes) {
-//   var pTags = document.querySelectorAll('#main p');
-//   console.log("chosenCrime", chosenCrime);
-//   console.log("all crimes",allCrimes)
-
-//   allCrimes.forEach(function(item, index) {
-//     if (allCrimes[index] = chosenCrime) {
-//       pTags[0].innerText = allCrimes[index].street_name
-//     }
-//     allCrimes[index] = item.category;
-//   });
-
-
-// }
-
 //populateSelect
 var populateSelect = function( crimes ) {
-  console.log("populateselect")
   var crimeList = [];
   var uniqueCrimeList= [];
   var select = document.querySelector('#crime-list');
+  var pTags = document.querySelector('#main p');
 
   crimes.forEach(function(item, index) {
     crimeList[index] = item.category;
@@ -72,18 +55,16 @@ var populateSelect = function( crimes ) {
     select.appendChild(option);  
   });
 
-  var div = document.querySelector( '#main p' );
-  console.log('div', div)
-  div.addEventListener('change', function ( event ) {
-    console.log(" in event listerne")
-    var index = this.value;
-    var crime = uniqueCrimeList[index];  
+  select.addEventListener('change', function(event) {
+    console.log ("helllllo")
+    var crimeToDisplay = this.value;
+    // var crimeSelected = uniqueCrimeList[index];  
 
-    console.log(" MAKESELECTION index", index);
-    console.log(" MAKESELECTION crime", crime);
-    updateInfor(crime);
+    console.log(" MAKESELECTION index", crimeToDisplay);
+    console.log(" MAKESELECTION crime", crimes);
+    updateInfo(crimeToDisplay, crimes);
 
-    var jsonString = JSON.stringify( crime );
+    var jsonString = JSON.stringify( crimeToDisplay );
     localStorage.setItem( 'selectedCrime', jsonString )  
   })
 }
@@ -97,31 +78,28 @@ var removeDuplicates = function ( crimeList ) {
   return  uniqueCrimeList;
 }
 
-//makesSelection
-// var makeSelection = function( uniqueCrimeList, crimes ) {
-//   console.log("makeselection")
-//   var div = document.querySelector( '#main p' )
+updateInfo
+var updateInfo = function( crimeToDisplay, crimes ) {
+  var ul = document.querySelector('#list');
+  var li = document.createElement('li');
 
-//   div.addEventListener('change', function ( event ) {
-//     console.log(" in event listerne")
-//     var index = this.value;
-//     var crime = uniqueCrimeList[index];  
+  crimes.forEach(function(item, index) {
 
-//     console.log(" MAKESELECTION index", index);
-//     console.log(" MAKESELECTION crime", crime);
-//     updateInfor(crime);
+    if (crimes[index].category === crimeToDisplay) {
 
-//     var jsonString = JSON.stringify( crime );
-//     localStorage.setItem( 'selectedCrime', jsonString )  
+      li.innerText = "location: " +crimes[index].location.street.name + index;
+      ul.appendChild(li);
+      li.innerText = "Outcome: " + crimes[index].outcome_status.category;
+      ul.appendChild(li);
 
-//     crimes.forEach(function(item, index) {
-//         if ( crimes[index] = chosenCrime) {
-//           pTags[0].innerText = allCrimes[index].street_name
-//         }
-//         allCrimes[index] = item.category;
-//       });
-//   })
+    }
 
+        //     pTags[0].innerText = crimes[index].street_name
+        //   }
+        //   crimes[index] = item.category;
+        });
+
+}
 
   window.addEventListener('load', app);
 
