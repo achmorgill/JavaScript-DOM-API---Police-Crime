@@ -11,7 +11,8 @@ var app = function(){
   request.addEventListener('load', function() {
     var jsonString = this.responseText;
     var crimes = JSON.parse(jsonString);
-    console.log(crimes)
+    console.log("aaaaaaaaa",crimes);
+
     render( crimes );
   });
   request.send();
@@ -20,6 +21,7 @@ var app = function(){
 //render 
 var render = function( crimes ) {
   var div = document.querySelector('#main');
+  console.log("crimmmmmmmmmmme", crimes)
 
   var storedCrime = localStorage.getItem('crimes');
   var crimeToDisplay = null;
@@ -33,33 +35,30 @@ var render = function( crimes ) {
     crimeToDisplay = crimes[0];
   }
   populateSelect(crimes);
+  console.log("chosencrime", chosenCrime)
+  console.log('crimmmmmes', crimes)
+
+
+  do a onclick here *******************
+  // displayCrimes( chosenCrime, crimes );
 }
 
-  // crimes.forEach(function(item, index) {
-  //   console.log( 'crime', item );
-  //   console.log( 'index', index )
-  //   item.index = index;
-  //   var option = document.createElement('option');
-  //   // option.value = index;
-  //   option.text = item.category;
-  //   div.appendChild(option);
-  // });
 
-// }
+// displayCrimes
+var displayCrimes = function(chosenCrime, allCrimes) {
+  var pTags = document.querySelectorAll('#main p');
+  console.log("chosenCrime", chosenCrime);
+  console.log("all crimes",allCrimes)
+
+  allCrimes.forEach(function(item, index) {
+    if (allCrimes[index] = chosenCrime) {
+      pTags[0].innerText = allCrimes[index].street_name
+    }
+    allCrimes[index] = item.category;
+  });
 
 
-//   updateInfo(beerToDisplay);
-// }
-// // updateinfo
-// var updateInfo = function(beer) {
-//   var pTags = document.querySelectorAll('#main p');
-//   var img = document.querySelector('#beer-image');
-//   console.log ("beer", beer.name, beer.tagline)
-//   pTags[0].innerText = beer.name;
-//   pTags[1].innerText = beer.tagline;
-//   img.src = beer.image_url;
-
-// }
+}
 
 //populateSelect
 var populateSelect = function( crimes ) {
@@ -78,6 +77,7 @@ var populateSelect = function( crimes ) {
     option.text = uniqueCrimeList;
     select.appendChild(option);  
   });
+
 }
 
 //removeDuplicates
