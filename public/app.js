@@ -46,7 +46,7 @@ var populateSelect = function( crimesToDisplay,allCrimes ) {
   var uniqueCrimeList= [];
   var select = document.querySelector('#crime-list');
   var pTags = document.querySelector('#main p');
-  
+
   allCrimes.forEach(function(item, index) {
     console.log("for each", item.category);
     crimeCategories[index] = item.category;
@@ -79,8 +79,9 @@ var removeDuplicates = function ( crimeList ) {
 var updateInfo = function( crimeToDisplay, allCrimes ) {
   var ul = document.querySelector('#crime-details');
   var button = document.querySelector('#crime-button');
-  console.log(allCrimes)
 
+  console.log(allCrimes)
+  ul.innerText = ""
   allCrimes.forEach(function(item, index) {
 
     if (allCrimes[index].category === crimeToDisplay) {
