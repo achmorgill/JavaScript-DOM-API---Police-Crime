@@ -2,7 +2,7 @@
 var app = function(){
 
   var crimeList = [];
-  var selectedCrimes = JSON.parse( localStorage.getItem( 'crime' )) || {}
+  var storedCrime = JSON.parse( localStorage.getItem( 'crime' )) || {}
 
   var url = "https://data.police.uk/api/crimes-street/all-crime?lat=52.629729&lng=-1.131592&date=2016-12";
 
@@ -10,46 +10,49 @@ var app = function(){
   request.open( "GET", url );
   request.addEventListener( 'load', function() {
     var jsonString = this.responseText;
-    var crimes = JSON.parse( jsonString );
+    var allCrimes = JSON.parse( jsonString );
 
-    var chosenCrime = render( crimes );
-    populateSelect ( crimes );
-
+    crimesToDisplay = render( allCrimes );
+    populateSelect ( crimesToDisplay, allCrimes );
   });
   request.send();
 }
 
 //render 
-var render = function( crimes ) {
+var render = function( allCrimes ) {
   var div = document.querySelector( '#main' );
   storedCrime = localStorage.getItem( 'selectedCrime' );
-  var crimeToDisplay = null;
+  var crimeToDisplay = "";
   console.log("crime", storedCrime)
 
   if ( storedCrime ) {
+    console.log(" storedcrime saved")
     crimeToDisplay = JSON.parse( storedCrime );
     var select = document.querySelector( '#crime-list' );
     select.selectedIndex = crimeToDisplay.index;
+    console.log("crimeTodisplay", crimeToDisplay)
   }
   else{
-    crimeToDisplay = crimes[0];
+    console.log("set crimesToDisplay = allCrimes[0]")
+    crimeToDisplay = allCrimes[0];
   }
-  return crimeToDisplay;  console.log('crimmmmmes', crimes)
+  return crimeToDisplay
 
 }
 
 //populateSelect
-var populateSelect = function( crimes ) {
-  var crimeList = [];
+var populateSelect = function( crimesToDisplay,allCrimes ) {
+  var crimeCategories = [];
   var uniqueCrimeList= [];
   var select = document.querySelector('#crime-list');
   var pTags = document.querySelector('#main p');
-
-  crimes.forEach(function(item, index) {
-    crimeList[index] = item.category;
+  
+  allCrimes.forEach(function(item, index) {
+    console.log("for each", item.category);
+    crimeCategories[index] = item.category;
   });
 
-  var uniqueCrimeList = removeDuplicates( crimeList );
+  var uniqueCrimeList = removeDuplicates( crimeCategories );
   uniqueCrimeList.forEach (function( uniqueCrimeList, index ) {
     var option = document.createElement('option');
     option.text = uniqueCrimeList;
@@ -58,39 +61,45 @@ var populateSelect = function( crimes ) {
 
   select.addEventListener('change', function(event) {
     var crimeToDisplay = this.value;
-    updateInfo(crimeToDisplay, crimes);
+    console.log("this.value", crimeToDisplay)
+    updateInfo(crimeToDisplay, allCrimes);
   })
 }
 
 //removeDuplicates
 var removeDuplicates = function ( crimeList ) {
-  var uniqueCrimeList = crimeList.filter(function( crime, currentIndex) {
-    var firstCrimeType = crimeList.indexOf(crime);
+  var uniqueCrimeList = crimeList.filter(function( allCrime, currentIndex) {
+    var firstCrimeType = crimeList.indexOf(allCrime);
     return firstCrimeType === currentIndex;
   });
   return  uniqueCrimeList;
 }
 
 //updateInfo - displays the last item in the list - overwrites each value until the last one - left it like this as there would be too much data to display on the screen.
-var updateInfo = function( crimeToDisplay, crimes ) {
-  var ul = document.querySelector('#list');
-  var button = document.querySelector('#maps');
-  var li = document.createElement('li');
-  console.log(crimes)
+var updateInfo = function( crimeToDisplay, allCrimes ) {
+  var ul = document.querySelector('#crime-details');
+  var button = document.querySelector('#crime-button');
+  console.log(allCrimes)
 
-  crimes.forEach(function(item, index) {
+  allCrimes.forEach(function(item, index) {
 
-    if (crimes[index].category === crimeToDisplay) {
+    if (allCrimes[index].category === crimeToDisplay) {
+       console.log(" **crimes to display",crimeToDisplay)
+      var outputString = crimeToDisplay.toUpperCase()  + "\nLocation: " + allCrimes[index].location.street.name + "\nCoordinates: Lat : " + allCrimes[index].location.latitude + "  Long : " + allCrimes[index].location.longitude  + "\nOutcome: " + allCrimes[index].outcome_status.category;
 
-      var outputString = crimeToDisplay.toUpperCase()  + "\nLocation: " + crimes[index].location.street.name + "\nCoordinates: Lat : " + crimes[index].location.latitude + "  Long : " + crimes[index].location.longitude  + "\nOutcome: " + crimes[index].outcome_status.category;
-
+      console.log("outuptstring",outputString)
+      var li = document.createElement('li');
       li.innerText = outputString;
       ul.appendChild(li);
+      console.log("json",jsonString)
+
       var jsonString = JSON.stringify( outputString );
       localStorage.setItem( 'selectedCrime', jsonString ) 
-     
+
     }
-  })
+  }) 
+  // button.addEventListener('click', initialise);
+
 }
 
 window.addEventListener('load', app);
